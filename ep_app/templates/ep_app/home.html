@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to EasyPost Manager</h1>
+    <div class="container">
+        <a href="{% url 'shipments_list' %}" class="btn btn-primary">Shipments List</a>
+        <a href="{% url 'addresses_list' %}" class="btn btn-primary">Addresses List</a>
+        <a href="{% url 'parcels_list' %}" class="btn btn-primary">Parcels List</a>
+    </div>
+</body>
+</html>

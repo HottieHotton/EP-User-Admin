@@ -1,0 +1,150 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+</head>
+<style>
+    .button-container {
+        text-align: center; /* Center align all buttons */
+        margin-top: 10px;
+    }
+    
+    .btn {
+        display: inline-block; /* Prevents full-width buttons */
+        padding: 8px 15px;
+        font-size: 14px;
+        text-decoration: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        margin: 5px; /* Adds spacing between buttons */
+    }
+    
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .btn-primary {
+        display: inline-block;
+        text-align: center;
+        margin: 10px auto;
+        justify-content: center;
+    }
+
+    .parcel-details {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 20px auto;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .detail-row strong {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .detail-row span {
+        color: #555;
+    }
+
+    .detail-row:last-child {
+        margin-bottom: 0;
+    }
+</style>
+
+<h1 style="text-align: center; margin-top: 20px;">Details for {{ obj_type|title }} ID:<br>{{ obj.id }}</h1>
+
+{% if obj_type == "shipment" %}
+<table style="border: 1px solid black; width: 40%; margin: 0 auto; border-collapse: collapse; text-align: center; margin-top: 20px;">
+    <tr style="border: 1px solid black;">
+        <th>To</th>
+        <td style="border: 1px solid black;">{{ obj.to_address.name | default:obj.to_address.company }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>From</th>
+        <td style="border: 1px solid black;">{{ obj.from_address.name | default:obj.from_address.company }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Tracking Status</th>
+        <td style="border: 1px solid black;">{{ obj.status }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Tracking Code</th>
+        <td style="border: 1px solid black;">{{ obj.tracking_code }} - <a href="{{ obj.tracker.public_url }}"" target="_blank">See Tracker</a></td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Carrier</th>
+        <td style="border: 1px solid black;">{{ obj.selected_rate.carrier | default:"N/A" }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Service</th>
+        <td style="border: 1px solid black;">{{ obj.selected_rate.service | default:"N/A" }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Rate</th>
+        <td style="border: 1px solid black;">${{ obj.selected_rate.rate | default:"N/A" }}</td>
+    </tr>
+    <tr style="border: 1px solid black;">
+        <th>Label</th>
+        <td style="border: 1px solid black;"><img src="{{ obj.postage_label.label_url | default:"N/A" }}" alt="Label" style="width="400px"; height="600px";"><a href="{{ obj.postage_label.label_url | default:"N/A" }}" target="_blank"><br>Label Link</a></td>
+    </tr>
+</table>
+
+
+{% elif obj_type == "address" %}
+<div style="text-align: center; margin-top: 20px;">
+    <table style="border: 1px solid black; width: 40%; margin: 0 auto; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 8px; text-align: left;">Names</th>
+                <th style="padding: 8px; text-align: left;">Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in obj.items %}
+                {% if key not in "_values,_immutable_values,_parent" %}
+                    <tr>
+                        <td style="border: 1px solid black; padding: 8px;"><strong>{{ key }}</strong></td>
+                        <td style="border: 1px solid black; padding: 8px;">{{ value|default_if_none:"" }}</td>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="2" style="padding: 8px; text-align: center;">No address details available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif obj_type == "parcels" %}
+<div class="parcel-details">
+    <div class="detail-row">
+        <strong>Weight:</strong> <span>{{ obj.weight }} oz</span>
+    </div>
+    <div class="detail-row">
+        <strong>Dimensions:</strong> <span>{{ obj.length }} x {{ obj.width }} x {{ obj.height }} in</span>
+    </div>
+</div>
+{% endif %}
+
+<div class="button-container">
+    {% if obj_type == "shipment" %}
+        <a href="{% url 'shipments_list' %}" class="btn btn-primary">Back to Shipments</a>
+    {% elif obj_type == "address" %}
+        <a href="{% url 'addresses_list' %}" class="btn btn-primary">Back to Addresses</a>
+    {% elif obj_type == "parcels" %}
+        <a href="{% url 'parcels_list' %}" class="btn btn-primary">Back to Parcels</a>
+    {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+</div>

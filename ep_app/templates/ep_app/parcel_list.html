@@ -1,0 +1,96 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel List</title>
+</head>
+<style>
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .btn-home {
+        padding: 10px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        border: none;
+    }
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+    
+    .styled-table th, .styled-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+    
+    .styled-table th {
+        background-color: #007BFF;
+        color: white;
+    }
+    
+    .styled-table tr:nth-child(even) {
+        background-color: #f3f3f3;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 14px;
+        text-decoration: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="header-container">
+    <h1>All Parcels</h1>
+    <a href="{% url 'home' %}" class="btn btn-home">Go Home</a>
+</div>
+<form method="GET" action="{% url 'parcels_list' %}">
+    <label for="id">Filter by ID:</label>
+    <input type="text" name="id" id="id" placeholder="Enter ID to filter" value="{{ filter_id }}">
+    <button type="submit">Search</button>
+</form>
+{% if parcels %}
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Weight</th>
+                <th>Height</th>
+                <th>Width</th>
+                <th>Length</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for parcel in parcels %}
+                <tr>
+                    <td>{{ parcel.id }}</td>
+                    <td>{{ parcel.weight|default:"N/A" }}</td>
+                    <td>{{ parcel.height|default:"N/A" }}</td>
+                    <td>{{ parcel.width|default:"N/A" }}</td>
+                    <td>{{ parcel.length|default:"N/A" }}</td>
+                    <td><a href="{% url 'detail' 'parcels' parcel.id %}" class="btn btn-primary">View</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No parcels found!</p>
+{% endif %}

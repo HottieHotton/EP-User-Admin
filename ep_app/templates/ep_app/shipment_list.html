@@ -1,0 +1,92 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment List</title>
+</head>
+<style>
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .btn-home {
+        padding: 10px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        border: none;
+    }
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+    
+    .styled-table th, .styled-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+    
+    .styled-table th {
+        background-color: #007BFF;
+        color: white;
+    }
+    
+    .styled-table tr:nth-child(even) {
+        background-color: #f3f3f3;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 14px;
+        text-decoration: none;
+        background-color: #007BFF;
+        color: white;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="header-container">
+    <h1>All Shipments</h1>
+    <a href="{% url 'home' %}" class="btn btn-home">Go Home</a>
+</div>
+<form method="GET" action="{% url 'shipments_list' %}">
+    <label for="id">Filter by ID:</label>
+    <input type="text" name="id" id="id" placeholder="Enter ID to filter" value="{{ filter_id }}">
+    <button type="submit">Search</button>
+</form>
+{% if shipments %}
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Reference</th>
+                <th>Tracking Code</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for shipment in shipments %}
+                <tr>
+                    <td>{{ shipment.id }}</td>
+                    <td>{{ shipment.reference|default:"No Reference" }}</td>
+                    <td>{{ shipment.tracking_code }}</td>
+                    <td><a href="{% url 'detail' 'shipment' shipment.id %}" class="btn btn-primary">View</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No shipments found!</p>
+{% endif %}
