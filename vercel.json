@@ -3,20 +3,14 @@
       {
         "src": "ep_user_admin/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
       }
     ],
-    "env": {
-      "PYTHON_VERSION": "3.12.9"
-    },
     "routes": [
         {
             "src": "/(.*)",
             "dest": "ep_user_admin/wsgi.py"
         }
-    ],
-    "commands": [
-      "pip install -r requirements.txt"
     ]
   }
   
