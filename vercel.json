@@ -1,0 +1,12 @@
+{
+    "builds": [
+      {
+        "src": "ep_app/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "env": {
+      "PYTHON_VERSION": "3.12.9"
+    }
+  }
+  
